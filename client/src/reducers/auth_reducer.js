@@ -10,7 +10,9 @@ function auth(state = { isAuthenticated: initialAuthState }, action) {
   switch (action.type) {
     case 'checkAuth':
       return { isAuthenticated: localStorage.getItem('token') ? true : false };
-
+    case 'logout':
+      localStorage.removeItem('token');
+      return {isAuthenticated:false}
     default:
       return { isAuthenticated: false };
   }

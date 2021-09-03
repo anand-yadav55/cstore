@@ -48,16 +48,17 @@ export default function Login(props) {
       };
 
       axios.post('/api/user/login', creds).then((res) => {
+        if(res.status==200){
         console.log(res.data);
         localStorage.setItem('token', res.data);
-        dispatch(checkAuth());
+        dispatch(checkAuth());}
       });
     }
   }
-  const isAuthenticated = true;
+  const isAuthenticated = useSelector((state)=>state);
   const classes = useStyles();
   // return isAuthenticated.auth.isAuthenticated ? (
-  return true ? (
+  return isAuthenticated.auth.isAuthenticated ? (
     <Redirect to="/" />
   ) : (
     <Container component="main" maxWidth="xs">

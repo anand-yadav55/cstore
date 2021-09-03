@@ -1,6 +1,6 @@
 import React from 'react';
 import * as actions from '../actions';
-import { useSelector } from 'react-redux';
+import { useDispatch,useSelector } from 'react-redux';
 
 import clsx from 'clsx';
 import { Redirect } from 'react-router-dom';
@@ -45,12 +45,13 @@ const useStyles = makeStyles((theme) => ({
     }),
   },
   appBarShift: {
-    marginLeft: drawerWidth,
-    width: `calc(100% - ${drawerWidth}px)`,
-    transition: theme.transitions.create(['width', 'margin'], {
-      easing: theme.transitions.easing.sharp,
-      duration: theme.transitions.duration.enteringScreen,
-    }),
+    // marginLeft: drawerWidth,
+    // width: `calc(100% - ${drawerWidth}px)`,
+    // width:'100%',
+    // transition: theme.transitions.create(['width', 'margin'], {
+    //   easing: theme.transitions.easing.sharp,
+    //   duration: theme.transitions.duration.enteringScreen,
+    // }),
   },
   menuButton: {
     marginRight: 36,
@@ -105,7 +106,7 @@ const useStyles = makeStyles((theme) => ({
 export default function Dashboard() {
   const classes = useStyles();
   const [open, setOpen] = React.useState(true);
-
+  const dispatch = useDispatch();
   const isAuthenticated = true;
 
   console.log(isAuthenticated);
@@ -145,12 +146,12 @@ export default function Dashboard() {
           >
             Dashboard
           </Typography>
-          <Button variant="contained" color="secondary">
+          <Button variant="contained" color="secondary" onClick={()=>{dispatch(actions.logout())}}>
             Sign out
           </Button>
         </Toolbar>
       </AppBar>
-      <Drawer
+      {/* <Drawer
         variant="permanent"
         classes={{
           paper: clsx(classes.drawerPaper, !open && classes.drawerPaperClose),
@@ -164,19 +165,18 @@ export default function Dashboard() {
         </div>
         <Divider />
         <Divider />
-      </Drawer>
+      </Drawer> */}
       <Box pt={9}>
         <input
           accept="image/*"
           className={classes.input}
           style={{ display: 'none' }}
-          class="a"
           id="raised-button-file"
           multiple
           type="file"
         />
         <label htmlFor="raised-button-file">
-          <Button variant="raised" component="span" className={classes.button}>
+          <Button variant="outlined" component="span" className={classes.button}>
             Upload
           </Button>
         </label>

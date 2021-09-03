@@ -11,7 +11,7 @@ import PrivateRoute from './components/PrivateRoute';
 
 function App() {
   const dispatch = useDispatch();
-  const isAuthenticated = useSelector((state) => state);
+  const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
   useEffect(() => {
     dispatch(actions.checkAuth());
   }, []);
@@ -35,7 +35,7 @@ function App() {
           else
         </button>
       </div> */}
-      {console.log(isAuthenticated.auth.isAuthenticated)}
+      {console.log(isAuthenticated)}
       <div className="App">
         <BrowserRouter>
           <Route
@@ -47,7 +47,7 @@ function App() {
           />
           <Route path="/Signup" component={Signup} />
           <PrivateRoute
-            // isAuthenticated={isAuthenticated}
+            isAuthenticated={isAuthenticated}
             // errorMessage={errorMessage}
             // dispatch={dispatch}
             path="/"

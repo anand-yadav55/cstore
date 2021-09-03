@@ -1,5 +1,7 @@
 import React from 'react';
 import axios from 'axios';
+import { createBrowserHistory } from 'history';
+
 import {
   Avatar,
   Button,
@@ -35,20 +37,21 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-function onSubmitForm(e) {
-  e.preventDefault();
-  axios
-    .post('/api/user', {
-      displayName: e.target.displayName.value,
-      email: e.target.email.value,
-      password: e.target.password.value,
-    })
-    .then((res) => {
-      console.log(res.data);
-    });
-}
 
-export default function SignUp() {
+export default function SignUp(props) {
+  function onSubmitForm(e) {
+    e.preventDefault();
+    axios
+      .post('/api/user', {
+        displayName: e.target.displayName.value,
+        email: e.target.email.value,
+        password: e.target.password.value,
+      })
+      .then((res) => {
+        console.log(res.data);
+        props.history.push('/')
+      });
+  }
   const classes = useStyles();
 
   return (

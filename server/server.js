@@ -11,9 +11,9 @@ const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
-
-require('dotenv').config();
-
+const dotenv=require('dotenv');
+dotenv.config({path:__dirname+'/.env'});
+console.log(process.env.MONGODB_CONNECTION_STRING,"hi")
 mongoose.Promise = global.Promise;
 mongoose.connect(
   process.env.MONGODB_CONNECTION_STRING,
@@ -69,7 +69,7 @@ app.post('/api/user', (req, res) => {
 //login user
 app.post('/api/user/login', (req, res) => {
   User.findOne({ email: req.body.email }, (err, user) => {
-    if (!user) res.json({ message: 'User not found' });
+    if (!user) return res.json({ message: 'User not found' });
 
     user.comparePassword(req.body.password, (err, isMatch) => {
       if (err) throw err;
@@ -77,7 +77,8 @@ app.post('/api/user/login', (req, res) => {
 
       user.generateToken((err, user) => {
         if (err) return res.status(400).send(err);
-        res.send(user.token);
+        console.log(user.token)
+        res.status(200).send(user.token);
       });
     });
   });

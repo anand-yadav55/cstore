@@ -7,6 +7,11 @@ export function checkAuth() {
     // payload,
   };
 }
+export function logout(){
+  return {
+    type:'logout'
+  }
+}
 
 // export const LOGIN_REQUEST = 'LOGIN_REQUEST';
 // export const LOGIN_SUCCESS = 'LOGIN_SUCCESS';
