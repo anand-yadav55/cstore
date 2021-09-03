@@ -1,6 +1,10 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const cookieParser = require('cookie-parser');
+const path = require('path');
+
+const multer = require('multer');
+const GridFsStorage = require('multer-gridfs-storage');
 
 const app = express();
 
@@ -23,18 +27,39 @@ mongoose.connect(
   }
 );
 
+// const storage = new GridFSStorage({
+//    url: process.env.MONGODB_CONNECTION_STRING,
+//   file: (req, file) => {
+//     return new Primise((resolve, reject) => {
+//       crypto.randomBytes(16, (err, buf) => {
+//         if (err) return reject(err);
+//         const filename = buf.toString('hex') + path.extname(file.originalname);
+//         const fileInfo = {
+//           filename: filename,
+//           bucketName: 'uploads',
+//         };
+//         resolve(fileInfo);
+//       });
+//     });
+//   },
+// });
+
+// const upload = multer({ storage });
+
 const { User } = require('./models/user');
 const { auth } = require('./middleware/auth');
+
+// ROUTES ///
 
 //register user
 app.post('/api/user', (req, res) => {
   const user = new User({
     password: req.body.password,
     email: req.body.email,
-    displayName: req.body.name,
+    displayName: req.body.displayName,
     token: req.body.token,
   });
-
+  console.log(req.body);
   user.save((err, doc) => {
     if (err) res.status(400).send(err);
     res.status(200).send(doc);
@@ -52,7 +77,7 @@ app.post('/api/user/login', (req, res) => {
 
       user.generateToken((err, user) => {
         if (err) return res.status(400).send(err);
-        res.cookie('auth', user.token).send('ok');
+        res.send(user.token);
       });
     });
   });

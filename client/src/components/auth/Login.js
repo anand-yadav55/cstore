@@ -1,4 +1,8 @@
 import React from 'react';
+import axios from 'axios';
+import { Redirect } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import { checkAuth, loginUser } from '../../actions';
 import {
   Avatar,
   Button,
@@ -33,11 +37,29 @@ const useStyles = makeStyles((theme) => ({
     margin: theme.spacing(3, 0, 2),
   },
 }));
+export default function Login(props) {
+  const dispatch = useDispatch();
+  function onSubmitForm(e) {
+    e.preventDefault();
+    if (e.target.email.value && e.target.password.value) {
+      let creds = {
+        email: e.target.email.value,
+        password: e.target.password.value,
+      };
 
-export default function Login() {
+      axios.post('/api/user/login', creds).then((res) => {
+        console.log(res.data);
+        localStorage.setItem('token', res.data);
+        dispatch(checkAuth());
+      });
+    }
+  }
+  const isAuthenticated = true;
   const classes = useStyles();
-
-  return (
+  // return isAuthenticated.auth.isAuthenticated ? (
+  return true ? (
+    <Redirect to="/" />
+  ) : (
     <Container component="main" maxWidth="xs">
       <CssBaseline />
       <div className={classes.paper}>
@@ -45,9 +67,16 @@ export default function Login() {
           <LockOutlined />
         </Avatar>
         <Typography component="h1" variant="h5">
-          Sign in
+          Log in
         </Typography>
-        <form className={classes.form} noValidate>
+        <form
+          className={classes.form}
+          method="POST"
+          onSubmit={(e) => {
+            onSubmitForm(e);
+          }}
+          noValidate
+        >
           <TextField
             variant="outlined"
             margin="normal"
@@ -81,7 +110,7 @@ export default function Login() {
             color="primary"
             className={classes.submit}
           >
-            Sign In
+            Log In
           </Button>
           <Grid container>
             <Grid item xs>
@@ -90,7 +119,7 @@ export default function Login() {
               </Link>
             </Grid>
             <Grid item>
-              <Link href="#" variant="body2">
+              <Link href="/signup" variant="body2">
                 {"Don't have an account? Sign Up"}
               </Link>
             </Grid>

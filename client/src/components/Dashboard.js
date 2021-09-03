@@ -1,18 +1,26 @@
 import React from 'react';
+import * as actions from '../actions';
+import { useSelector } from 'react-redux';
+
 import clsx from 'clsx';
+import { Redirect } from 'react-router-dom';
 import { makeStyles } from '@material-ui/core/styles';
-import CssBaseline from '@material-ui/core/CssBaseline';
-import Drawer from '@material-ui/core/Drawer';
-import AppBar from '@material-ui/core/AppBar';
-import Toolbar from '@material-ui/core/Toolbar';
-import Typography from '@material-ui/core/Typography';
-import Divider from '@material-ui/core/Divider';
+
+import {
+  CssBaseline,
+  Drawer,
+  AppBar,
+  Box,
+  Button,
+  Toolbar,
+  Typography,
+  Divider,
+  Badge,
+} from '@material-ui/core/';
+
 import IconButton from '@material-ui/core/IconButton';
-import Badge from '@material-ui/core/Badge';
 import MenuIcon from '@material-ui/icons/Menu';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
-import NotificationsIcon from '@material-ui/icons/Notifications';
-
 const drawerWidth = 240;
 
 const useStyles = makeStyles((theme) => ({
@@ -97,13 +105,17 @@ const useStyles = makeStyles((theme) => ({
 export default function Dashboard() {
   const classes = useStyles();
   const [open, setOpen] = React.useState(true);
+
+  const isAuthenticated = true;
+
+  console.log(isAuthenticated);
+
   const handleDrawerOpen = () => {
     setOpen(true);
   };
   const handleDrawerClose = () => {
     setOpen(false);
   };
-
   return (
     <div className={classes.root}>
       <CssBaseline />
@@ -133,11 +145,9 @@ export default function Dashboard() {
           >
             Dashboard
           </Typography>
-          <IconButton color="inherit">
-            <Badge badgeContent={4} color="secondary">
-              <NotificationsIcon />
-            </Badge>
-          </IconButton>
+          <Button variant="contained" color="secondary">
+            Sign out
+          </Button>
         </Toolbar>
       </AppBar>
       <Drawer
@@ -155,6 +165,22 @@ export default function Dashboard() {
         <Divider />
         <Divider />
       </Drawer>
+      <Box pt={9}>
+        <input
+          accept="image/*"
+          className={classes.input}
+          style={{ display: 'none' }}
+          class="a"
+          id="raised-button-file"
+          multiple
+          type="file"
+        />
+        <label htmlFor="raised-button-file">
+          <Button variant="raised" component="span" className={classes.button}>
+            Upload
+          </Button>
+        </label>
+      </Box>
       <main className={classes.content}>
         <div className={classes.appBarSpacer} />
       </main>

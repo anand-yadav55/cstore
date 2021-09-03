@@ -1,4 +1,5 @@
 import React from 'react';
+import axios from 'axios';
 import {
   Avatar,
   Button,
@@ -34,6 +35,19 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
+function onSubmitForm(e) {
+  e.preventDefault();
+  axios
+    .post('/api/user', {
+      displayName: e.target.displayName.value,
+      email: e.target.email.value,
+      password: e.target.password.value,
+    })
+    .then((res) => {
+      console.log(res.data);
+    });
+}
+
 export default function SignUp() {
   const classes = useStyles();
 
@@ -47,31 +61,26 @@ export default function SignUp() {
         <Typography component="h1" variant="h5">
           Sign up
         </Typography>
-        <form className={classes.form} noValidate>
+        <form
+          className={classes.form}
+          onSubmit={(e) => onSubmitForm(e)}
+          method="POST"
+          noValidate
+        >
           <Grid container spacing={2}>
-            <Grid item xs={12} sm={6}>
+            <Grid item xs={12}>
               <TextField
-                autoComplete="fname"
-                name="firstName"
+                autoComplete="displayName"
+                name="displayName"
                 variant="outlined"
                 required
                 fullWidth
-                id="firstName"
-                label="First Name"
+                id="displayName"
+                label="Name"
                 autoFocus
               />
             </Grid>
-            <Grid item xs={12} sm={6}>
-              <TextField
-                variant="outlined"
-                required
-                fullWidth
-                id="lastName"
-                label="Last Name"
-                name="lastName"
-                autoComplete="lname"
-              />
-            </Grid>
+
             <Grid item xs={12}>
               <TextField
                 variant="outlined"
@@ -107,7 +116,7 @@ export default function SignUp() {
           </Button>
           <Grid container justifyContent="flex-end">
             <Grid item>
-              <Link href="#" variant="body2">
+              <Link href="Login" variant="body2">
                 Already have an account? Sign in
               </Link>
             </Grid>
