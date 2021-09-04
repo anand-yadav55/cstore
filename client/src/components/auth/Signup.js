@@ -1,14 +1,14 @@
 import React from 'react';
 import axios from 'axios';
-import { createBrowserHistory } from 'history';
+// import { createBrowserHistory } from 'history';
 
 import {
   Avatar,
   Button,
   CssBaseline,
   TextField,
-  FormControlLabel,
-  Checkbox,
+  // FormControlLabel,
+  // Checkbox,
   Link,
   Grid,
   Typography,

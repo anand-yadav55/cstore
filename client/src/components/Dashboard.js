@@ -1,26 +1,28 @@
-import React from 'react';
+import React,{useState,useEffect} from 'react';
 import * as actions from '../actions';
-import { useDispatch,useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 
 import clsx from 'clsx';
-import { Redirect } from 'react-router-dom';
+// import { Redirect } from 'react-router-dom';
 import { makeStyles } from '@material-ui/core/styles';
 
+import UploadSkeleton from './misc/UploadSkeleton';
 import {
   CssBaseline,
-  Drawer,
   AppBar,
   Box,
   Button,
   Toolbar,
   Typography,
-  Divider,
-  Badge,
+  // Drawer,
+  // Divider,
+  // Badge,
 } from '@material-ui/core/';
 
-import IconButton from '@material-ui/core/IconButton';
-import MenuIcon from '@material-ui/icons/Menu';
-import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
+// import IconButton from '@material-ui/core/IconButton';
+// import MenuIcon from '@material-ui/icons/Menu';
+// import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
+import axios from 'axios';
 const drawerWidth = 240;
 
 const useStyles = makeStyles((theme) => ({
@@ -43,15 +45,6 @@ const useStyles = makeStyles((theme) => ({
       easing: theme.transitions.easing.sharp,
       duration: theme.transitions.duration.leavingScreen,
     }),
-  },
-  appBarShift: {
-    // marginLeft: drawerWidth,
-    // width: `calc(100% - ${drawerWidth}px)`,
-    // width:'100%',
-    // transition: theme.transitions.create(['width', 'margin'], {
-    //   easing: theme.transitions.easing.sharp,
-    //   duration: theme.transitions.duration.enteringScreen,
-    // }),
   },
   menuButton: {
     marginRight: 36,
@@ -103,40 +96,40 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
+
+
+const handleUpload=(e)=>{
+  // e.preventDefault();
+  // console.log(e.target[0].value)
+  var formData = new FormData();
+  var imagefile = document.querySelector('#file');
+  // console.log(imagefile.files[0])
+  formData.append("file", imagefile.files[0]);
+  axios.post('/api/upload',formData).then((res)=>imagefile.value=null )
+}
+
 export default function Dashboard() {
   const classes = useStyles();
-  const [open, setOpen] = React.useState(true);
   const dispatch = useDispatch();
-  const isAuthenticated = true;
+  const [uploadData,setUploadData] = useState([]);
 
-  console.log(isAuthenticated);
-
-  const handleDrawerOpen = () => {
-    setOpen(true);
-  };
-  const handleDrawerClose = () => {
-    setOpen(false);
-  };
+  useEffect(()=>{
+    axios.get('/api/getFiles').then((res)=>{
+      // res.data.files.map((item)=>console.log(item))
+      if(res.data.files)
+        setUploadData(res.data.files);
+    })
+  },[])
+  
   return (
     <div className={classes.root}>
       <CssBaseline />
       <AppBar
         position="absolute"
-        className={clsx(classes.appBar, open && classes.appBarShift)}
+        className={clsx(classes.appBar, classes.appBarShift)}
       >
         <Toolbar className={classes.toolbar}>
-          <IconButton
-            edge="start"
-            color="inherit"
-            aria-label="open drawer"
-            onClick={handleDrawerOpen}
-            className={clsx(
-              classes.menuButton,
-              open && classes.menuButtonHidden
-            )}
-          >
-            <MenuIcon />
-          </IconButton>
+            
           <Typography
             component="h1"
             variant="h6"
@@ -151,35 +144,27 @@ export default function Dashboard() {
           </Button>
         </Toolbar>
       </AppBar>
-      {/* <Drawer
-        variant="permanent"
-        classes={{
-          paper: clsx(classes.drawerPaper, !open && classes.drawerPaperClose),
-        }}
-        open={open}
-      >
-        <div className={classes.toolbarIcon}>
-          <IconButton onClick={handleDrawerClose}>
-            <ChevronLeftIcon />
-          </IconButton>
-        </div>
-        <Divider />
-        <Divider />
-      </Drawer> */}
       <Box pt={9}>
+        <form onSubmit={(e)=>handleUpload(e)}>
         <input
-          accept="image/*"
+          accept="*"
           className={classes.input}
-          style={{ display: 'none' }}
-          id="raised-button-file"
+          // style={{ display: 'none' }}
+          id="file"
+
           multiple
           type="file"
         />
         <label htmlFor="raised-button-file">
-          <Button variant="outlined" component="span" className={classes.button}>
+          <Button type="submit" variant="outlined" className={classes.button}>
             Upload
           </Button>
         </label>
+        </form>
+      </Box>
+      <Box pt={12}>
+        <h1>All Uploaded Files</h1>
+        {uploadData.map((item,idx)=> <UploadSkeleton key={idx} id={item._id} fileId={item.files_id} filename={item.filename}/>)}
       </Box>
       <main className={classes.content}>
         <div className={classes.appBarSpacer} />

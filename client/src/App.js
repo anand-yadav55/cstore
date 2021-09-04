@@ -14,42 +14,18 @@ function App() {
   const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
   useEffect(() => {
     dispatch(actions.checkAuth());
-  }, []);
+  });
   return (
     <div>
-      {/* <div>
-        {console.log(actions.vehicleCar)}
-        <h1>{counter.auth.vehicle}</h1>
-        <button
-          onClick={() => {
-            dispatch(actions.vehicleCar());
-          }}
-        >
-          Car
-        </button>
-        <button
-          onClick={() => {
-            dispatch({ type: 'a' });
-          }}
-        >
-          else
-        </button>
-      </div> */}
-      {console.log(isAuthenticated)}
       <div className="App">
         <BrowserRouter>
           <Route
-            // isAuthenticated={isAuthenticated}
-            // errorMessage={errorMessage}
-            // dispatch={dispatch}
             path="/Login"
             component={Login}
           />
           <Route path="/Signup" component={Signup} />
           <PrivateRoute
             isAuthenticated={isAuthenticated}
-            // errorMessage={errorMessage}
-            // dispatch={dispatch}
             path="/"
             exact
             component={Dashboard}

@@ -1,7 +1,7 @@
 export function checkAuth() {
-  let payload = {
-    vehicle: 'Car',
-  };
+  // let payload = {
+  //   vehicle: 'Car',
+  // };
   return {
     type: 'checkAuth',
     // payload,

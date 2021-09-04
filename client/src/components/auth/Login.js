@@ -2,7 +2,7 @@ import React from 'react';
 import axios from 'axios';
 import { Redirect } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { checkAuth, loginUser } from '../../actions';
+import { checkAuth } from '../../actions';
 import {
   Avatar,
   Button,
@@ -48,9 +48,9 @@ export default function Login(props) {
       };
 
       axios.post('/api/user/login', creds).then((res) => {
-        if(res.status==200){
+        if(res.status===200&&typeof res.data==='string'){
+          localStorage.setItem('token', res.data);
         console.log(res.data);
-        localStorage.setItem('token', res.data);
         dispatch(checkAuth());}
       });
     }
